@@ -98,6 +98,22 @@ class Client:
                 self.alert("Disconnected")
                 return
 
+            elif cmd["type"] == "user":
+                if cmd["method"] == "get":
+                    pass
+
+                elif cmd["method"] == "create":
+                    pass
+
+            elif cmd["type"] == "install":
+                pass
+
+            elif cmd["type"] == "uninstall":
+                pass
+
+            elif cmd["type"] == "upload":
+                pass
+
     def quit(self):
         self.conn.close()
         self.active = False
