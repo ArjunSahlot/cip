@@ -1,2 +1,2 @@
 # cip
-The C++ Package Installer.
+The C++ Package Manager.

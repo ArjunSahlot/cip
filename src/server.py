@@ -1,6 +1,6 @@
 #
 #  Cip
-#  C++ package manager.
+#  C++ Package Manager.
 #  Copyright Arjun Sahlot 2021
 #
 #  This program is free software: you can redistribute it and/or modify
