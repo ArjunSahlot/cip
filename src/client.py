@@ -30,8 +30,8 @@ from hashlib import sha256
 from getpass import getpass
 
 
-IP = input("Server IP: ")
-PORT = int(input("Port: "))
+IP = "192.168.1.10"
+PORT = 5555
 
 
 class Client:
