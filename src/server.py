@@ -35,6 +35,13 @@ class User:
         self.github = github
         self.description = description
 
+    def __str__(self):
+        string  = f"User: {self.username}\n"
+        string += f"Website: {self.website}\n"
+        string += f"Github: {self.github}\n"
+        string += f"Description: {self.description}"
+        return string
+
 
 class Server:
     def __init__(self):
