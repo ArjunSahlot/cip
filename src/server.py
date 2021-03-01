@@ -74,7 +74,14 @@ class Server:
         self.server.bind((IP, PORT))
 
         self.clients = []
+        self.users = []
         self.active = True
+
+    def get_user(self, username):
+        for user in self.users:
+            if user.username == username:
+                return user
+        return f"No user named {username}"
 
     def start(self):
         print(f"[SERVER] Started on IP {IP} and PORT {PORT}")
@@ -141,7 +148,7 @@ class Client:
 
             elif cmd["type"] == "user":
                 if cmd["method"] == "get":
-                    self.send({"reply": str(self.server.get_user(cmd[""]))})
+                    self.send({"reply": str(self.server.get_user(cmd["user"]))})
 
                 elif cmd["method"] == "create":
                     pass
