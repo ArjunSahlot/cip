@@ -114,14 +114,13 @@ def upload(conn, args):
 
 def user(conn, args):
     if "-c" in args or "--create" in args:
-        username = input("Username: ")
         pwd = sha256(getpass("Password: ").encode()).hexdigest()
         website = input("Website: ")
         github = input("Github: ")
         description = input("Description: ")
-        conn.send({"type": "user", "method": "create", "user": username, "pass": pwd, "website": website, "github": github, "description": description})
+        conn.send({"type": "user", "method": "create", "user": args[0], "pass": pwd, "website": website, "github": github, "description": description})
     else:
-        conn.send({"type": "user", "method": "get"})
+        conn.send({"type": "user", "method": "get", "user": args[0]})
         data = conn.recv()
         for key, val in data.items():
             print(f"{key.capitalize()}: {val}")

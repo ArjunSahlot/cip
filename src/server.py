@@ -141,7 +141,7 @@ class Client:
 
             elif cmd["type"] == "user":
                 if cmd["method"] == "get":
-                    pass
+                    self.send({"reply": str(self.server.get_user(cmd[""]))})
 
                 elif cmd["method"] == "create":
                     pass
