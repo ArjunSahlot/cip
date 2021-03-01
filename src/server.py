@@ -192,3 +192,11 @@ class Client:
             data += self.conn.recv(curr_len)
 
         return pickle.loads(data)
+
+
+def main():
+    server = Server()
+    server.start()
+
+
+main()
