@@ -78,6 +78,9 @@ class Server:
         self.users = []
         self.active = True
 
+    def check_user(self, username):
+        return isinstance(self.get_user(username), str)
+
     def get_user(self, username):
         for user in self.users:
             if user.username == username:
@@ -85,11 +88,7 @@ class Server:
         return f"No user named {username}"
 
     def add_user(self, username, password, website, github, description):
-        if isinstance(self.get_user(username), str):
-            self.users.append(User(username, password, website, github, description))
-            return True
-        else:
-            return False
+        self.users.append(User(username, password, website, github, description))
 
     def start(self):
         print(f"[SERVER] Started on IP {IP} and PORT {PORT}")
@@ -159,10 +158,14 @@ class Client:
                     self.send({"type": "reply", "reply": str(self.server.get_user(cmd["user"]))})
 
                 elif cmd["method"] == "create":
-                    if self.server.add_user(cmd["username"], cmd["password"], cmd["website"], cmd["github"], cmd["description"]):
+                    self.server.add_user(cmd["username"], cmd["password"], cmd["website"], cmd["github"], cmd["description"])
+                    self.send({"type": "reply", "reply": "success"})
+
+                elif cmd["method"] == "verify":
+                    if self.server.check_user(cmd["username"]):
                         self.send({"type": "reply", "reply": "success"})
                     else:
-                        self.send({"type": "reply", "reply": "retry"})
+                        self.send({"type": "reply", "reply": "exists"})
 
             elif cmd["type"] == "install":
                 pass
