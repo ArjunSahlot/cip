@@ -22,7 +22,6 @@ import socket
 import pickle
 import ctypes
 import threading
-from hashlib import sha256
 
 IP = input("IP: ")
 PORT = input("Port: ")
