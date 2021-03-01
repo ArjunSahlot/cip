@@ -116,24 +116,26 @@ def upload(conn, args):
 
 def user(conn, args):
     if "-c" in args or "--create" in args:
+        username = args[0]
         pwd = sha256(getpass("Password: ").encode()).hexdigest()
         print("Note: The rest of the fields are not required. Leave them blank at choice.")
         email = input("Email: ")
         website = input("Website: ")
         github = input("Github: ")
         description = input("Description: ")
-        conn.send({"type": "user", "method": "create", "username": args[0], "password": pwd, "email": email, "website": website, "github": github, "description": description})
+        conn.send({"type": "user", "method": "create", "username": username, "password": pwd, "email": email, "website": website, "github": github, "description": description})
         while conn.recv()["reply"] != "success":
             print("User already exists. Try a different username.")
+            username = input("Username: ")
             pwd = sha256(getpass("Password: ").encode()).hexdigest()
             print("Note: The rest of the fields are not required. Leave them blank at choice.")
             email = input("Email: ")
             website = input("Website: ")
             github = input("Github: ")
             description = input("Description: ")
-            conn.send({"type": "user", "method": "create", "username": args[0], "password": pwd, "email": email, "website": website, "github": github, "description": description})
+            conn.send({"type": "user", "method": "create", "username": username, "password": pwd, "email": email, "website": website, "github": github, "description": description})
 
-        print(f"Successfully created user {args[0]}")
+        print(f"Successfully created user {username}")
 
     else:
         conn.send({"type": "user", "method": "get", "user": args[0]})
