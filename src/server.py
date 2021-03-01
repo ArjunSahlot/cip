@@ -22,6 +22,7 @@ import socket
 import pickle
 import ctypes
 import threading
+from hashlib import sha256
 
 IP = input("IP: ")
 PORT = input("Port: ")
@@ -34,6 +35,9 @@ class User:
         self.website = website
         self.github = github
         self.description = description
+
+    def auth(self, pwd):
+        return pwd == self.password
 
     def __str__(self):
         string  = f"User: {self.username}\n"
