@@ -173,7 +173,7 @@ class Client:
                         self.send({"type": "reply", "reply": "exists"})
 
             elif cmd["type"] == "install":
-                pass
+                package = self.server.get_package(cmd["package"], cmd["version"])
 
             elif cmd["type"] == "uninstall":
                 pass

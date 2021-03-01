@@ -96,7 +96,7 @@ def install(conn, args):
     if "=" in args[0]:
         package, version = filter(lambda x: x, args[0].split("="))
     else:
-        package, version = args[0], "recent"
+        package, version = args[0], "RECENT"
 
     conn.send({"type": "install", "package": package, "version": version})
 
