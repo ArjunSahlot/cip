@@ -99,6 +99,21 @@ def install(conn, args):
         package, version = args[0], "RECENT"
 
     conn.send({"type": "install", "package": package, "version": version})
+    content = conn.recv()["reply"]
+    if isinstance(content, str):
+        print(content)
+    else:
+        if sys.platform == "windows":
+            raise NotImplementedError("Currently windows is not supported for installation.")
+            path = ""
+        elif sys.platform == "darwin":
+            raise NotImplementedError("Currently macos isn't supported for installation.")
+            path = ""
+        else:
+            path = "/usr/include/c++/9"
+
+        with open(os.path.join(path, package), "wb") as f:
+            f.write(content)
 
 
 def uninstall(conn, args):
