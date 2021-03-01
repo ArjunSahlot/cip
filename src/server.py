@@ -34,6 +34,9 @@ class Package:
         self.version = version
         self.content = content
 
+    def get_bytes(self):
+        return self.content
+
     def get_detailed(self):
         return f"{self.name}={self.version}"
 
