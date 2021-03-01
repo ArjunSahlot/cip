@@ -156,6 +156,7 @@ class Client:
 
                 elif cmd["method"] == "create":
                     self.server.add_user(cmd["username"], cmd["password"], cmd["website"], cmd["github"], cmd["description"])
+                    self.send({"type": "reply", "reply": "success"})
 
             elif cmd["type"] == "install":
                 pass

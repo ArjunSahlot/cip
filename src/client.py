@@ -121,6 +121,8 @@ def user(conn, args):
         github = input("Github: ")
         description = input("Description: ")
         conn.send({"type": "user", "method": "create", "username": args[0], "password": pwd, "website": website, "github": github, "description": description})
+        if conn.recv()["reply"] == "success":
+            print(f"Successfully created user {args[0]}")
     else:
         conn.send({"type": "user", "method": "get", "user": args[0]})
         print(conn.recv()["reply"])
