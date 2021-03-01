@@ -85,7 +85,10 @@ class Server:
         return f"No user named {username}"
 
     def add_user(self, username, password, website, github, description):
-        self.users.append(User(username, password, website, github, description))
+        if isinstance(self.get_user(username), str):
+            self.users.append(User(username, password, website, github, description))
+        else:
+            return False
 
     def start(self):
         print(f"[SERVER] Started on IP {IP} and PORT {PORT}")
@@ -155,8 +158,10 @@ class Client:
                     self.send({"type": "reply", "reply": str(self.server.get_user(cmd["user"]))})
 
                 elif cmd["method"] == "create":
-                    self.server.add_user(cmd["username"], cmd["password"], cmd["website"], cmd["github"], cmd["description"])
-                    self.send({"type": "reply", "reply": "success"})
+                    if self.server.add_user(cmd["username"], cmd["password"], cmd["website"], cmd["github"], cmd["description"]):
+                        self.send({"type": "reply", "reply": "success"})
+                    else:
+                        self.send({"type": "reply", "reply": "retry"})
 
             elif cmd["type"] == "install":
                 pass
