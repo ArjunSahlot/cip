@@ -129,16 +129,10 @@ def user(conn, args):
         github = input("Github: ")
         description = input("Description: ")
         conn.send({"type": "user", "method": "create", "username": username, "password": pwd, "email": email, "website": website, "github": github, "description": description})
-        while conn.recv()["reply"] != "success":
-            pwd = sha256(getpass("Password: ").encode()).hexdigest()
-            print("Note: The rest of the fields are not required. Leave them blank at choice.")
-            email = input("Email: ")
-            website = input("Website: ")
-            github = input("Github: ")
-            description = input("Description: ")
-            conn.send({"type": "user", "method": "create", "username": username, "password": pwd, "email": email, "website": website, "github": github, "description": description})
-
-        print(f"Successfully created user {username}")
+        if conn.recv()["reply"] != "success":
+            print(f"Successfully created user {username}")
+        else:
+            print("Unfortunately the user could not be created.")
 
     else:
         conn.send({"type": "user", "method": "get", "user": args[0]})
