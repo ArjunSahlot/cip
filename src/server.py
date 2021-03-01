@@ -87,6 +87,7 @@ class Server:
     def add_user(self, username, password, website, github, description):
         if isinstance(self.get_user(username), str):
             self.users.append(User(username, password, website, github, description))
+            return True
         else:
             return False
 
