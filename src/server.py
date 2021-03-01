@@ -57,6 +57,9 @@ class Package:
             if v == version:
                 return v
 
+    def __eq__(self, pack):
+        return self.name == pack
+
     def __str__(self):
         return f"{self.name} ({len(self.versions)} versions)"
 
@@ -70,6 +73,14 @@ class User:
         self.github = github
         self.description = description
         self.packages = []
+
+    def get_version(self, package, version):
+        for pack in self.packages:
+            if pack == package:
+                if ver := pack.get_version(version):
+                    return ver
+                else:
+                    return f"Package {package} has no version {version}"
 
     def auth(self, pwd):
         return pwd == self.password
@@ -100,8 +111,10 @@ class Server:
         self.users = []
         self.active = True
 
-    def get_package(self, package, version):
-        pass
+    def get_version(self, package, version):
+        for user in self.users:
+            if pack := user.get_version(package, version):
+                return pack
 
     def check_user(self, username):
         return isinstance(self.get_user(username), str)
