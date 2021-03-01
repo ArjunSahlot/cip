@@ -83,6 +83,9 @@ class Server:
         self.users = []
         self.active = True
 
+    def get_package(self, package, version):
+        pass
+
     def check_user(self, username):
         return isinstance(self.get_user(username), str)
 
