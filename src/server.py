@@ -24,7 +24,7 @@ import ctypes
 import threading
 
 IP = input("IP: ")
-PORT = input("Port: ")
+PORT = int(input("Port: "))
 
 
 class Package:

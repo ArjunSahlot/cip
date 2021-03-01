@@ -31,7 +31,7 @@ from getpass import getpass
 
 
 IP = input("Server IP: ")
-PORT = input("Port: ")
+PORT = int(input("Port: "))
 
 
 class Client:
