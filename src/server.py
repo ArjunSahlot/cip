@@ -58,8 +58,9 @@ class User:
         string += f"Github: {self.github}\n"
         string += f"Description: {self.description}\n"
         if self.packages:
+            packs = set(map(str, self.packages))
             string += "Packages:\n"
-            for pack in self.packages[:-1]:
+            for pack in packs[:-1]:
                 string += str(pack) + "\n"
             string += str(self.packages[-1])
         else:
