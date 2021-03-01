@@ -26,6 +26,7 @@ import ctypes
 import shutil
 import threading
 from pathlib import Path
+from hashlib import sha256
 from getpass import getpass
 
 
@@ -114,7 +115,7 @@ def upload(conn, args):
 def user(conn, args):
     if "-c" in args or "--create" in args:
         username = input("Username: ")
-        pwd = getpass("Password: ")
+        pwd = sha256(getpass("Password: ").encode()).hexdigest()
         website = input("Website: ")
         github = input("Github: ")
         description = input("Description: ")
