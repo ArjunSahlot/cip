@@ -117,6 +117,11 @@ def upload(conn, args):
 def user(conn, args):
     if "-c" in args or "--create" in args:
         username = args[0]
+        conn.send({"type": "user", "method": "verify", "username": "username"})
+        while conn.recv()["reply"] != "success":
+            print("User already exists. Try a different username.")
+            username = input("Username: ")
+            conn.send({"type": "user", "method": "verify", "username": username})
         pwd = sha256(getpass("Password: ").encode()).hexdigest()
         print("Note: The rest of the fields are not required. Leave them blank at choice.")
         email = input("Email: ")
@@ -125,8 +130,6 @@ def user(conn, args):
         description = input("Description: ")
         conn.send({"type": "user", "method": "create", "username": username, "password": pwd, "email": email, "website": website, "github": github, "description": description})
         while conn.recv()["reply"] != "success":
-            print("User already exists. Try a different username.")
-            username = input("Username: ")
             pwd = sha256(getpass("Password: ").encode()).hexdigest()
             print("Note: The rest of the fields are not required. Leave them blank at choice.")
             email = input("Email: ")
