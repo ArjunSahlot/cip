@@ -28,20 +28,37 @@ IP = "192.168.1.10"
 PORT = 5555
 
 
-class Package:
-    def __init__(self, name, version, content):
-        self.name = name
+class Version:
+    def __init__(self, owner, version, content):
+        self.owner = owner
         self.version = version
         self.content = content
+
+    def __eq__(self, version):
+        return self.version == version
+
+    def __ne__(self, version):
+        return self.version != version
 
     def get_bytes(self):
         return self.content
 
-    def get_detailed(self):
-        return f"{self.name}={self.version}"
+
+class Package:
+    def __init__(self, name):
+        self.name = name
+        self.versions = []
+
+    def add_version(self, version, content):
+        self.versions.append(Version(self, version, content))
+
+    def get_version(self, version):
+        for v in self.versions:
+            if v == version:
+                return v
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({len(self.versions)} versions)"
 
 
 class User:
