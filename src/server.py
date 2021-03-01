@@ -35,6 +35,7 @@ class User:
         self.website = website
         self.github = github
         self.description = description
+        self.packages = []
 
     def auth(self, pwd):
         return pwd == self.password
