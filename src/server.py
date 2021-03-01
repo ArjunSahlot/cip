@@ -27,6 +27,19 @@ IP = input("IP: ")
 PORT = input("Port: ")
 
 
+class Package:
+    def __init__(self, name, version, content):
+        self.name = name
+        self.version = version
+        self.content = content
+
+    def get_detailed(self):
+        return f"{self.name}={self.version}"
+
+    def __str__(self):
+        return self.name
+
+
 class User:
     def __init__(self, username, password, website, github, description):
         self.username = username
@@ -43,7 +56,14 @@ class User:
         string  = f"User: {self.username}\n"
         string += f"Website: {self.website}\n"
         string += f"Github: {self.github}\n"
-        string += f"Description: {self.description}"
+        string += f"Description: {self.description}\n"
+        if self.packages:
+            string += "Packages:\n"
+            for pack in self.packages[:-1]:
+                string += str(pack) + "\n"
+            string += str(self.packages[-1])
+        else:
+            string += "This user hasn't created any packages yet"
         return string
 
 
