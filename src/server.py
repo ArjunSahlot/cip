@@ -18,6 +18,7 @@
 #
 
 import time
+import zlib
 import socket
 import pickle
 import ctypes
@@ -148,7 +149,7 @@ class Client:
 
             elif cmd["type"] == "user":
                 if cmd["method"] == "get":
-                    self.send({"reply": str(self.server.get_user(cmd["user"]))})
+                    self.send({"type": "reply", "reply": str(self.server.get_user(cmd["user"]))})
 
                 elif cmd["method"] == "create":
                     pass
@@ -167,7 +168,7 @@ class Client:
         self.active = False
 
     def send(self, obj):
-        data = pickle.dumps(obj)
+        data = zlib.compress(pickle.dumps(obj))
         len_msg = (str(len(data)) + self.padding)[:self.header].encode()
 
         packets = []
@@ -191,7 +192,7 @@ class Client:
             curr_len = min(self.packet_size, length-len(data))
             data += self.conn.recv(curr_len)
 
-        return pickle.loads(data)
+        return pickle.loads(zlib.decompress(data))
 
 
 def main():

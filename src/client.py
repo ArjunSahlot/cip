@@ -74,6 +74,8 @@ class Client:
             print("This could be because the server is shutting down.")
             ctypes.pointer(ctypes.c_char.from_address(5))[0]
 
+        return data
+
 
 def print_help():
     print("cip - The C++ Package Installer")
@@ -121,9 +123,7 @@ def user(conn, args):
         conn.send({"type": "user", "method": "create", "user": args[0], "pass": pwd, "website": website, "github": github, "description": description})
     else:
         conn.send({"type": "user", "method": "get", "user": args[0]})
-        data = conn.recv()
-        for key, val in data.items():
-            print(f"{key.capitalize()}: {val}")
+        print(conn.recv()["reply"])
 
 
 def main():
