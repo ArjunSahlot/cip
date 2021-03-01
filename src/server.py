@@ -42,9 +42,10 @@ class Package:
 
 
 class User:
-    def __init__(self, username, password, website, github, description):
+    def __init__(self, username, password, email, website, github, description):
         self.username = username
         self.password = password
+        self.email = email
         self.website = website
         self.github = github
         self.description = description
@@ -55,6 +56,7 @@ class User:
 
     def __str__(self):
         string  = f"User: {self.username}\n"
+        string += f"Email: {self.email}\n"
         string += f"Website: {self.website}\n"
         string += f"Github: {self.github}\n"
         string += f"Description: {self.description}\n"
@@ -87,8 +89,8 @@ class Server:
                 return user
         return f"No user named {username}"
 
-    def add_user(self, username, password, website, github, description):
-        self.users.append(User(username, password, website, github, description))
+    def add_user(self, username, password, email, website, github, description):
+        self.users.append(User(username, password, email, website, github, description))
 
     def start(self):
         print(f"[SERVER] Started on IP {IP} and PORT {PORT}")
@@ -158,7 +160,7 @@ class Client:
                     self.send({"type": "reply", "reply": str(self.server.get_user(cmd["user"]))})
 
                 elif cmd["method"] == "create":
-                    self.server.add_user(cmd["username"], cmd["password"], cmd["website"], cmd["github"], cmd["description"])
+                    self.server.add_user(cmd["username"], cmd["password"], cmd["email"], cmd["website"], cmd["github"], cmd["description"])
                     self.send({"type": "reply", "reply": "success"})
 
                 elif cmd["method"] == "verify":
