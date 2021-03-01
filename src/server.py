@@ -84,6 +84,9 @@ class Server:
                 return user
         return f"No user named {username}"
 
+    def add_user(self, username, password, website, github, description):
+        self.users.append(User(username, password, website, github, description))
+
     def start(self):
         print(f"[SERVER] Started on IP {IP} and PORT {PORT}")
         threading.Thread(target=self.cleanup).start()
@@ -152,7 +155,7 @@ class Client:
                     self.send({"type": "reply", "reply": str(self.server.get_user(cmd["user"]))})
 
                 elif cmd["method"] == "create":
-                    pass
+                    self.server.add_user(cmd["username"], cmd["password"], cmd["website"], cmd["github"], cmd["description"])
 
             elif cmd["type"] == "install":
                 pass
