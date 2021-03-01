@@ -27,6 +27,15 @@ IP = input("IP: ")
 PORT = input("Port: ")
 
 
+class User:
+    def __init__(self, username, password, website, github, description):
+        self.username = username
+        self.password = password
+        self.website = website
+        self.github = github
+        self.description = description
+
+
 class Server:
     def __init__(self):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
