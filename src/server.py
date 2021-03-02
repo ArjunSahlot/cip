@@ -115,7 +115,10 @@ class Server:
         self.active = True
 
     def add_package(self, user, package, version, content):
-        
+        pass
+
+    def auth(self, username, password):
+        return self.get_user(username).auth(password)
 
     def get_version(self, package, version):
         for user in self.users:
@@ -220,6 +223,9 @@ class Client:
 
             elif cmd["type"] == "upload":
                 self.server.add_package(cmd["user"], cmd["package"], cmd["version"], cmd["content"])
+
+            elif cmd["type"] == "auth":
+                self.server.auth(cmd["username"], cmd["password"])
 
     def quit(self):
         self.conn.close()
