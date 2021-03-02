@@ -152,7 +152,7 @@ def upload(conn, args):
         for i in range(3):
             password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
             conn.send({"type": "auth", "username": username, "password": password})
-            if conn.recv()["reply"] == "success":
+            if conn.recv()["reply"]:
                 break
             print("Incorrect password")
         else:
