@@ -141,7 +141,9 @@ def upload(conn, args):
     with open(tmp, "rb") as f:
         content = f.read()
     os.remove(tmp)
+    print("Uploading package...")
     conn.send({"type": "upload", "package": content})
+    print("Successfully uploaded")
 
 
 def user(conn, args):
