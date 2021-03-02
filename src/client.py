@@ -34,6 +34,10 @@ IP = "192.168.1.10"
 PORT = 5555
 
 
+def encrypt(string):
+    return sha256(string.encode()).hexdigest()
+
+
 class Client:
     header = 64
     padding = " " * header
@@ -136,13 +140,28 @@ def uninstall(conn, args):
 
 
 def upload(conn, args):
+    username = input("Username: ")
+    conn.send({"type": "user", "method": "verify", "username": username})
+    while conn.recv()["reply"] == "success":
+        print(f"User {username} does not exist")
+        input("Username: ")
+        conn.send({"type": "user", "method": "verify", "username": username})
+    password = getpass("Password: ")
+    conn.send({"type": "auth", "username": username, "password": password})
+    for _ in range(3):
+        if conn.recv()["reply"] == "success":
+            break
+        print("Incorrect password")
+        password = getpass("Password: ")
+        conn.send({"type": "auth", "username": username, "password": password})
+
     tmp = Path.home() / "Downloads/cip-tmp.zip"
     shutil.make_archive(tmp, "zip", args[0])
     with open(tmp, "rb") as f:
         content = f.read()
     os.remove(tmp)
     print("Uploading package...")
-    conn.send({"type": "upload", "package": content})
+    conn.send({"type": "upload", "package": os.path.basename(args[0]), "version": args[1], "content": content})
     print("Successfully uploaded")
 
 
@@ -152,7 +171,7 @@ def user(conn, args):
         print("Username is not alphanumeric")
         username = input("Username: ")
     if "-c" in args or "--create" in args:
-        conn.send({"type": "user", "method": "verify", "username": "username"})
+        conn.send({"type": "user", "method": "verify", "username": username})
         while conn.recv()["reply"] != "success":
             print("User already exists. Try a different username.")
             username = input("Username: ")
