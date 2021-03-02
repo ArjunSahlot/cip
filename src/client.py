@@ -31,7 +31,7 @@ from getpass import getpass
 
 
 IP = "192.168.1.10"
-PORT = 5555
+PORT = 5050
 
 
 def encrypt(string):
@@ -159,6 +159,8 @@ def upload(conn, args):
             print("3 attempts failed. Try again next time.")
             return
 
+        print("Password authentication successful")
+        print("Compressing data...")
         if os.path.isdir(args[0]):
             tmp = Path.home() / "Downloads/cip-tmp.zip"
             shutil.make_archive(tmp, "zip", args[0])
