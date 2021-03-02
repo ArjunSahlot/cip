@@ -77,6 +77,11 @@ class User:
         self.description = description
         self.packages = []
 
+    def add_package(self, package, version, content):
+        p = Package(package)
+        p.add_version(version, content)
+        self.packages.append(p)
+
     def get_version(self, package, version):
         for pack in self.packages:
             if pack == package:
@@ -115,7 +120,7 @@ class Server:
         self.active = True
 
     def add_package(self, user, package, version, content):
-        pass
+        self.get_user(user).add_package(package, version, content)
 
     def auth(self, username, password):
         return self.get_user(username).auth(password)
