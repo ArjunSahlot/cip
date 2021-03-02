@@ -146,14 +146,16 @@ def upload(conn, args):
         print(f"User {username} does not exist")
         input("Username: ")
         conn.send({"type": "user", "method": "verify", "username": username})
-    password = getpass("Password: ")
+    password = getpass("(Attempt 1/3) Password: ")
     conn.send({"type": "auth", "username": username, "password": password})
-    for _ in range(3):
+    for i in range(2):
         if conn.recv()["reply"] == "success":
             break
         print("Incorrect password")
-        password = getpass("Password: ")
+        password = getpass(f"(Attempt {i+1}/3)Password: ")
         conn.send({"type": "auth", "username": username, "password": password})
+    else:
+        print("3 attempts failed. Try again next time.")
 
     tmp = Path.home() / "Downloads/cip-tmp.zip"
     shutil.make_archive(tmp, "zip", args[0])
