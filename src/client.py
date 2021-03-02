@@ -149,13 +149,13 @@ def upload(conn, args):
             print(f"User {username} does not exist")
             input("Username: ")
             conn.send({"type": "user", "method": "verify", "username": username})
-        password = getpass("(Attempt 1/3) Password: ")
+        password = encrypt(getpass("(Attempt 1/3) Password: "))
         conn.send({"type": "auth", "username": username, "password": password})
         for i in range(2):
             if conn.recv()["reply"] == "success":
                 break
             print("Incorrect password")
-            password = getpass(f"(Attempt {i+1}/3)Password: ")
+            password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
             conn.send({"type": "auth", "username": username, "password": password})
         else:
             print("3 attempts failed. Try again next time.")
@@ -183,7 +183,7 @@ def user(conn, args):
                 print("User already exists. Try a different username.")
                 username = input("Username: ")
                 conn.send({"type": "user", "method": "verify", "username": username})
-            pwd = sha256(getpass("Password: ").encode()).hexdigest()
+            pwd = encrypt(getpass("Password: "))
             print("Note: The rest of the fields are not required. Leave them blank at choice.")
             email = input("Email: ")
             website = input("Website: ")
