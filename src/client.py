@@ -233,6 +233,3 @@ def main():
 
 
 main()
-
-
-# Correct passwords are going through client. Server isn't authing properly.
