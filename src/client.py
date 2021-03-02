@@ -107,7 +107,7 @@ def install(conn, args):
             raise NotImplementedError("Currently windows is not supported for installation.")
             path = ""
         elif sys.platform == "darwin":
-            raise NotImplementedError("Currently macos isn't supported for installation.")
+            raise NotImplementedError("Currently macos is not supported for installation.")
             path = ""
         else:
             path = "/usr/include/c++/9"
@@ -117,7 +117,17 @@ def install(conn, args):
 
 
 def uninstall(conn, args):
-    pass
+    if sys.platform == "windows":
+        print("No such package")
+    elif sys.platform == "darwin":
+        print("No such package")
+    else:
+        if os.path.isfile(path := os.path.join("/usr/include/c++/9", args[0])):
+            os.remove(path)
+        elif os.path.isdir(path):
+            shutil.rmtree(path)
+        else:
+            print("No such package")
 
 
 def upload(conn, args):
