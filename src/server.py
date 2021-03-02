@@ -230,7 +230,7 @@ class Client:
                 self.server.add_package(cmd["user"], cmd["package"], cmd["version"], cmd["content"])
 
             elif cmd["type"] == "auth":
-                self.server.auth(cmd["username"], cmd["password"])
+                self.send({"type": "reply", "reply": self.server.auth(cmd["username"], cmd["password"])})
 
     def quit(self):
         self.conn.close()

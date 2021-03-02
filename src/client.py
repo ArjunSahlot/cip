@@ -159,6 +159,7 @@ def upload(conn, args):
             conn.send({"type": "auth", "username": username, "password": password})
         else:
             print("3 attempts failed. Try again next time.")
+            return
 
         tmp = Path.home() / "Downloads/cip-tmp.zip"
         shutil.make_archive(tmp, "zip", args[0])
