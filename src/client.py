@@ -149,14 +149,12 @@ def upload(conn, args):
             print(f"User {username} does not exist")
             input("Username: ")
             conn.send({"type": "user", "method": "verify", "username": username})
-        password = encrypt(getpass("(Attempt 1/3) Password: "))
-        conn.send({"type": "auth", "username": username, "password": password})
-        for i in range(2):
+        for i in range(3):
+            password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
+            conn.send({"type": "auth", "username": username, "password": password})
             if conn.recv()["reply"] == "success":
                 break
             print("Incorrect password")
-            password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
-            conn.send({"type": "auth", "username": username, "password": password})
         else:
             print("3 attempts failed. Try again next time.")
             return
