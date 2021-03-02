@@ -159,11 +159,18 @@ def upload(conn, args):
             print("3 attempts failed. Try again next time.")
             return
 
-        tmp = Path.home() / "Downloads/cip-tmp.zip"
-        shutil.make_archive(tmp, "zip", args[0])
-        with open(tmp, "rb") as f:
-            content = f.read()
-        os.remove(tmp)
+        if os.path.isdir(args[0]):
+            tmp = Path.home() / "Downloads/cip-tmp.zip"
+            shutil.make_archive(tmp, "zip", args[0])
+            with open(tmp, "rb") as f:
+                content = f.read()
+            os.remove(tmp)
+        elif os.path.isfile(args[0]):
+            with open(args[0], "r") as f:
+                content = f.read().encode()
+        else:
+            print("Not a valid path.")
+            return
         print("Uploading package...")
         conn.send({"type": "upload", "package": os.path.basename(args[0]), "version": args[1], "content": content})
         print("Successfully uploaded")
