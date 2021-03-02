@@ -53,9 +53,12 @@ class Package:
         self.versions.append(Version(self, version, content))
 
     def get_version(self, version):
-        for v in self.versions:
-            if v == version:
-                return v
+        if version == "RECENT":
+            return max(self.versions, lambda x: int(x.name.replace(".", "")))
+        else:
+            for v in self.versions:
+                if v == version:
+                    return v
 
     def __eq__(self, pack):
         return self.name == pack
