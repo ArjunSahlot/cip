@@ -163,7 +163,7 @@ def upload(conn, args):
         print("Compressing data...")
         if os.path.isdir(args[0]):
             tmp = Path.home() / "Downloads/cip-tmp.zip"
-            shutil.make_archive(tmp, "zip", args[0])
+            shutil.make_archive(os.path.splitext(tmp)[0], "zip", args[0])
             with open(tmp, "rb") as f:
                 content = f.read()
             os.remove(tmp)
