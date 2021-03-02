@@ -97,102 +97,106 @@ def print_help():
 
 
 def install(conn, args):
-    if "=" in args[0]:
-        package, version = filter(lambda x: x, args[0].split("="))
-    else:
-        package, version = args[0], "RECENT"
-
-    conn.send({"type": "install", "package": package, "version": version})
-    content = conn.recv()["reply"]
-    if isinstance(content, str):
-        print(content)
-    else:
-        print("Creating path...")
-        if sys.platform == "windows":
-            raise NotImplementedError("Currently windows is not supported for installation.")
-            path = ""
-        elif sys.platform == "darwin":
-            raise NotImplementedError("Currently macos is not supported for installation.")
-            path = ""
+    if args:
+        if "=" in args[0]:
+            package, version = filter(lambda x: x, args[0].split("="))
         else:
-            path = "/usr/include/c++/9"
+            package, version = args[0], "RECENT"
 
-        print("Writing package...")
+        conn.send({"type": "install", "package": package, "version": version})
+        content = conn.recv()["reply"]
+        if isinstance(content, str):
+            print(content)
+        else:
+            print("Creating path...")
+            if sys.platform == "windows":
+                raise NotImplementedError("Currently windows is not supported for installation.")
+                path = ""
+            elif sys.platform == "darwin":
+                raise NotImplementedError("Currently macos is not supported for installation.")
+                path = ""
+            else:
+                path = "/usr/include/c++/9"
 
-        with open(os.path.join(path, package), "wb") as f:
-            f.write(content)
+            print("Writing package...")
 
-        print(f"Successfully installed {package}")
+            with open(os.path.join(path, package), "wb") as f:
+                f.write(content)
+
+            print(f"Successfully installed {package}")
 
 
 def uninstall(conn, args):
-    if sys.platform == "windows":
-        print("No such package")
-    elif sys.platform == "darwin":
-        print("No such package")
-    else:
-        if os.path.isfile(path := os.path.join("/usr/include/c++/9", args[0])):
-            os.remove(path)
-        elif os.path.isdir(path):
-            shutil.rmtree(path)
-        else:
+    if args:
+        if sys.platform == "windows":
             print("No such package")
+        elif sys.platform == "darwin":
+            print("No such package")
+        else:
+            if os.path.isfile(path := os.path.join("/usr/include/c++/9", args[0])):
+                os.remove(path)
+            elif os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                print("No such package")
 
 
 def upload(conn, args):
-    username = input("Username: ")
-    conn.send({"type": "user", "method": "verify", "username": username})
-    while conn.recv()["reply"] == "success":
-        print(f"User {username} does not exist")
-        input("Username: ")
+    if args:
+        username = input("Username: ")
         conn.send({"type": "user", "method": "verify", "username": username})
-    password = getpass("(Attempt 1/3) Password: ")
-    conn.send({"type": "auth", "username": username, "password": password})
-    for i in range(2):
-        if conn.recv()["reply"] == "success":
-            break
-        print("Incorrect password")
-        password = getpass(f"(Attempt {i+1}/3)Password: ")
+        while conn.recv()["reply"] == "success":
+            print(f"User {username} does not exist")
+            input("Username: ")
+            conn.send({"type": "user", "method": "verify", "username": username})
+        password = getpass("(Attempt 1/3) Password: ")
         conn.send({"type": "auth", "username": username, "password": password})
-    else:
-        print("3 attempts failed. Try again next time.")
+        for i in range(2):
+            if conn.recv()["reply"] == "success":
+                break
+            print("Incorrect password")
+            password = getpass(f"(Attempt {i+1}/3)Password: ")
+            conn.send({"type": "auth", "username": username, "password": password})
+        else:
+            print("3 attempts failed. Try again next time.")
 
-    tmp = Path.home() / "Downloads/cip-tmp.zip"
-    shutil.make_archive(tmp, "zip", args[0])
-    with open(tmp, "rb") as f:
-        content = f.read()
-    os.remove(tmp)
-    print("Uploading package...")
-    conn.send({"type": "upload", "package": os.path.basename(args[0]), "version": args[1], "content": content})
-    print("Successfully uploaded")
+        tmp = Path.home() / "Downloads/cip-tmp.zip"
+        shutil.make_archive(tmp, "zip", args[0])
+        with open(tmp, "rb") as f:
+            content = f.read()
+        os.remove(tmp)
+        print("Uploading package...")
+        conn.send({"type": "upload", "package": os.path.basename(args[0]), "version": args[1], "content": content})
+        print("Successfully uploaded")
 
 
 def user(conn, args):
-    username = args[0]
-    while not args[0].isalnum():
-        print("Username is not alphanumeric")
-        username = input("Username: ")
-    if "-c" in args or "--create" in args:
-        conn.send({"type": "user", "method": "verify", "username": username})
-        while conn.recv()["reply"] != "success":
-            print("User already exists. Try a different username.")
+    if args:
+        username = args[0]
+        while not args[0].isalnum():
+            print("Username is not alphanumeric")
             username = input("Username: ")
+        if "-c" in args or "--create" in args:
             conn.send({"type": "user", "method": "verify", "username": username})
-        pwd = sha256(getpass("Password: ").encode()).hexdigest()
-        print("Note: The rest of the fields are not required. Leave them blank at choice.")
-        email = input("Email: ")
-        website = input("Website: ")
-        github = input("Github: ")
-        description = input("Description: ")
-        conn.send({"type": "user", "method": "create", "username": username, "password": pwd, "email": email, "website": website, "github": github, "description": description})
-        if conn.recv()["reply"] == "success":
-            print(f"Successfully created user {username}")
-        else:
-            print("Unfortunately the user could not be created.")
+            while conn.recv()["reply"] != "success":
+                print("User already exists. Try a different username.")
+                username = input("Username: ")
+                conn.send({"type": "user", "method": "verify", "username": username})
+            pwd = sha256(getpass("Password: ").encode()).hexdigest()
+            print("Note: The rest of the fields are not required. Leave them blank at choice.")
+            email = input("Email: ")
+            website = input("Website: ")
+            github = input("Github: ")
+            description = input("Description: ")
+            conn.send({"type": "user", "method": "create", "username": username, "password": pwd, "email": email, "website": website, "github": github, "description": description})
+            if conn.recv()["reply"] == "success":
+                print(f"Successfully created user {username}")
+            else:
+                print("Unfortunately the user could not be created.")
 
-    else:
-        conn.send({"type": "user", "method": "get", "user": username})
-        print(conn.recv()["reply"])
+        else:
+            conn.send({"type": "user", "method": "get", "user": username})
+            print(conn.recv()["reply"])
 
 
 def main():
