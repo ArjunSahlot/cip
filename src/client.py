@@ -103,6 +103,7 @@ def install(conn, args):
     if isinstance(content, str):
         print(content)
     else:
+        print("Creating path...")
         if sys.platform == "windows":
             raise NotImplementedError("Currently windows is not supported for installation.")
             path = ""
@@ -112,8 +113,12 @@ def install(conn, args):
         else:
             path = "/usr/include/c++/9"
 
+        print("Writing package...")
+
         with open(os.path.join(path, package), "wb") as f:
             f.write(content)
+
+        print(f"Successfully installed {package}")
 
 
 def uninstall(conn, args):
