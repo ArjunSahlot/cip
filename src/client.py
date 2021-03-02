@@ -130,8 +130,11 @@ def upload(conn, args):
 
 
 def user(conn, args):
+    username = args[0]
+    while not args[0].isalnum():
+        print("Username is not alphanumeric")
+        username = input("Username: ")
     if "-c" in args or "--create" in args:
-        username = args[0]
         conn.send({"type": "user", "method": "verify", "username": "username"})
         while conn.recv()["reply"] != "success":
             print("User already exists. Try a different username.")
@@ -150,7 +153,7 @@ def user(conn, args):
             print("Unfortunately the user could not be created.")
 
     else:
-        conn.send({"type": "user", "method": "get", "user": args[0]})
+        conn.send({"type": "user", "method": "get", "user": username})
         print(conn.recv()["reply"])
 
 
