@@ -117,7 +117,7 @@ def install(conn, args):
 
 
 def uninstall(conn, args):
-    conn.send({"type": "uninstall", "package": args[0]})
+    pass
 
 
 def upload(conn, args):

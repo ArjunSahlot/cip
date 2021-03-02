@@ -215,9 +215,6 @@ class Client:
                 else:
                     self.send({"type": "reply", "reply": version})
 
-            elif cmd["type"] == "uninstall":
-                pass
-
             elif cmd["type"] == "upload":
                 pass
 
