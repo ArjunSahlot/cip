@@ -114,6 +114,9 @@ class Server:
         self.users = []
         self.active = True
 
+    def add_package(self, user, package, version, content):
+        
+
     def get_version(self, package, version):
         for user in self.users:
             if pack := user.get_version(package, version):
@@ -216,7 +219,7 @@ class Client:
                     self.send({"type": "reply", "reply": version})
 
             elif cmd["type"] == "upload":
-                pass
+                self.server.add_package(cmd["user"], cmd["package"], cmd["version"], cmd["content"])
 
     def quit(self):
         self.conn.close()
