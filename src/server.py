@@ -132,6 +132,9 @@ class Server:
         self.users = []
         self.active = True
 
+    def delete_user(self, user):
+        self.users.remove(self.get_user(user))
+
     def package_exists(self, user, package):
         for u in self.users:
             if u != user:
@@ -242,6 +245,10 @@ class Client:
                         self.send({"type": "reply", "reply": "success"})
                     else:
                         self.send({"type": "reply", "reply": "exists"})
+
+                elif cmd["method"] == "delete":
+                    self.server.delete_user(cmd["user"])
+                    self.send({"type": "reply", "reply": "success"})
 
             elif cmd["type"] == "install":
                 version = self.server.get_version(cmd["package"], cmd["version"])
