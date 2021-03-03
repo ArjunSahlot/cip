@@ -25,7 +25,7 @@ import ctypes
 import threading
 
 IP = "192.168.1.10"
-PORT = 5050
+PORT = 5555
 
 
 class Version:
@@ -54,7 +54,7 @@ class Package:
 
     def get_version(self, version):
         if version == "RECENT":
-            return max(self.versions, lambda x: int(x.name.replace(".", "")))
+            return max(self.versions, key=lambda x: int(x.name.replace(".", "")))
         else:
             for v in self.versions:
                 if v == version:

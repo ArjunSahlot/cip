@@ -32,7 +32,7 @@ from getpass import getpass
 
 
 IP = "192.168.1.10"
-PORT = 5050
+PORT = 5555
 
 
 def encrypt(string):
