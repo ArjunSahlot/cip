@@ -194,8 +194,11 @@ def upload(conn, args):
             print("Not a valid path.")
             return
         print("Uploading package...")
-        conn.send({"type": "upload", "package": pack_name, "version": version, "content": content})
-        print("Successfully uploaded")
+        conn.send({"type": "upload", "user": username, "package": pack_name, "version": version, "content": content})
+        if conn.recv()["reply"] == "success":
+            print("Successfully uploaded")
+        else:
+            print("Upload failed... Try again next time")
 
 
 def user(conn, args):
