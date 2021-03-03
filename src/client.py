@@ -145,7 +145,7 @@ def uninstall(conn, args):
 def upload(conn, args):
     if args:
         pack_name = args[0]
-        while re.search(re.compile(), pack_name) is None:
+        while re.search(re.compile(r"[a-zA-Z0-9-]+"), pack_name) is None:
             print(f"Invalid package name {pack_name}")
             pack_name = input("Package name: ")
 

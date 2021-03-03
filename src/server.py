@@ -131,7 +131,7 @@ class Server:
         self.active = True
 
     def package_exists(self, user, package):
-        for u in self.us:
+        for u in self.users:
             if u != user:
                 for p in u.packages:
                     if p == package:
