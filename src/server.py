@@ -98,6 +98,12 @@ class User:
     def auth(self, pwd):
         return pwd == self.password
 
+    def __eq__(self, name):
+        return self.username == name
+
+    def __ne__(self, name):
+        return self.username == name
+
     def __str__(self):
         string  = f"User: {self.username}\n"
         string += f"Email: {self.email}\n"
@@ -123,6 +129,15 @@ class Server:
         self.clients = []
         self.users = []
         self.active = True
+
+    def package_exists(self, user, package):
+        for u in self.us:
+            if u != user:
+                for p in u.packages:
+                    if p == package:
+                        return True
+
+        return False
 
     def add_package(self, user, package, version, content):
         self.get_user(user).add_package(package, version, content)
@@ -239,6 +254,9 @@ class Client:
 
             elif cmd["type"] == "version":
                 self.send({"type": "reply", "reply": not isinstance(self.server.get_version(cmd["package"], cmd["version"]), str)})
+
+            elif cmd["type"] == "package":
+                self.send({"type": "reply", "reply": self.server.package_exists(cmd["user"], cmd["package"])})
 
     def quit(self):
         self.conn.close()
