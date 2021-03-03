@@ -228,6 +228,7 @@ def user(conn, args):
             if encrypt(getpass("Confirm password: ")) != pwd:
                 print("Passwords didn't match")
                 return
+            print("Passwords match")
             print("Note: The rest of the fields are not required. Leave them blank at choice.")
             email = input("Email: ")
             website = input("Website: ")
