@@ -154,12 +154,11 @@ def upload(conn, args):
             print(f"Version {version} already exists")
             version = input("Version: ")
             conn.send({"type": "version", "package": pack_name, "version": version})
-
         username = input("Username: ")
         conn.send({"type": "user", "method": "verify", "username": username})
         while conn.recv()["reply"] == "success":
             print(f"User {username} does not exist")
-            input("Username: ")
+            username = input("Username: ")
             conn.send({"type": "user", "method": "verify", "username": username})
         for i in range(3):
             password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
