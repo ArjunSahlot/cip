@@ -239,6 +239,9 @@ def user(conn, args):
             else:
                 print("Unfortunately the user could not be created.")
 
+        elif "-d" in args or "--delete" in args:
+            pass
+
         else:
             conn.send({"type": "user", "method": "get", "user": username})
             print(conn.recv()["reply"])
