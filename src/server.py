@@ -102,7 +102,7 @@ class User:
         return self.username == name
 
     def __ne__(self, name):
-        return self.username == name
+        return self.username != name
 
     def __str__(self):
         string  = f"User: {self.username}\n"
