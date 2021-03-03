@@ -25,8 +25,8 @@ import ctypes
 import threading
 from datetime import datetime
 
-IP = "192.168.1.10"
-PORT = 5050
+IP = input("IP: ")
+PORT = input("Port: ")
 
 
 class Version:

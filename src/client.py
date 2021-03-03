@@ -31,8 +31,8 @@ from hashlib import sha256
 from getpass import getpass
 
 
-IP = "192.168.1.10"
-PORT = 5050
+IP = input("IP: ")
+PORT = input("Port: ")
 
 
 def encrypt(string):
