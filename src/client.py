@@ -25,7 +25,6 @@ import socket
 import pickle
 import ctypes
 import shutil
-import threading
 from getpass import getuser
 from pathlib import Path
 from hashlib import sha256
