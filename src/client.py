@@ -32,7 +32,7 @@ from getpass import getpass
 
 
 IP = input("IP: ")
-PORT = input("Port: ")
+PORT = int(input("Port: "))
 
 
 def encrypt(string):

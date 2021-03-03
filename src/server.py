@@ -26,7 +26,7 @@ import threading
 from datetime import datetime
 
 IP = input("IP: ")
-PORT = input("Port: ")
+PORT = int(input("Port: "))
 
 
 class Version:
