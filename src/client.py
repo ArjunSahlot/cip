@@ -140,17 +140,20 @@ def install(conn, args):
 
 def uninstall(conn, args):
     if args:
+        print("Getting path...")
         if sys.platform == "windows":
-            print("No such package")
+            print(f"Package {args[0]} does not exist")
         elif sys.platform == "darwin":
-            print("No such package")
+            print(f"Package {args[0]} does not exist")
         else:
+            print("Removing package...")
             if os.path.isfile(path := os.path.join("/usr/include/c++/9", args[0])):
                 os.remove(path)
             elif os.path.isdir(path):
                 shutil.rmtree(path)
             else:
-                print("No such package")
+                print(f"Package {args[0]} does not exist")
+            print(f"Successfully removed {args[0]}")
 
 
 def upload(conn, args):
