@@ -127,6 +127,15 @@ def install(conn, args):
             with open(os.path.join(path, package), "wb") as f:
                 f.write(content)
 
+            print("Changing permissions...")
+
+            if sys.platform == "windows":
+                raise NotImplementedError("Currently windows is not supported for installation.")
+            elif sys.platform == "darwin":
+                raise NotImplementedError("Currently macos is not supported for installation.")
+            else:
+                os.system(f"chmod +x {os.path.join(path, package)}")
+
             print(f"Successfully installed {package}")
 
 
