@@ -173,13 +173,6 @@ def upload(conn, args):
             pack_name = input("Package Name: ")
             conn.send({"type": "package", "package": pack_name, "user": username})
 
-        version = input("Version: ")
-        conn.send({"type": "version", "package": pack_name, "version": version})
-        while conn.recv()["reply"]:
-            print(f"Version {version} already exists")
-            version = input("Version: ")
-            conn.send({"type": "version", "package": pack_name, "version": version})
-
         for i in range(3):
             password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
             conn.send({"type": "auth", "username": username, "password": password})
@@ -189,6 +182,14 @@ def upload(conn, args):
         else:
             print("3 attempts failed. Try again next time.")
             return
+
+        version = input("Version: ")
+        conn.send({"type": "version", "package": pack_name, "version": version})
+        while conn.recv()["reply"]:
+            print(f"Version {version} already exists")
+            version = input("Version: ")
+            conn.send({"type": "version", "package": pack_name, "version": version})
+
 
         print("Password authentication successful")
         print("Compressing data...")
