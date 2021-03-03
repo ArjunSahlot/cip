@@ -240,7 +240,28 @@ def user(conn, args):
                 print("Unfortunately the user could not be created.")
 
         elif "-d" in args or "--delete" in args:
-            pass
+            conn.send({"type": "user", "method": "verify", "username": username})
+            while conn.recv()["reply"] == "success":
+                print(f"User {username} does not exist")
+                username = input("Username: ")
+                conn.send({"type": "user", "method": "verify", "username": username})
+
+            for i in range(3):
+                password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
+                conn.send({"type": "auth", "username": username, "password": password})
+                if conn.recv()["reply"]:
+                    break
+                print("Incorrect password")
+            else:
+                print("3 attempts failed. Try again next time.")
+                return
+            if "y" in input(f"Are you sure you want to delete {username}? [y/n] ").lower():
+                print("Deleting user from server...")
+                conn.send({"type": "user", "user": username, "method": "delete"})
+                if conn.recv()["reply"] == "success":
+                    print(f"{username} got deleted")
+                else:
+                    print(f"Deletion failed for {username}")
 
         else:
             conn.send({"type": "user", "method": "get", "user": username})
