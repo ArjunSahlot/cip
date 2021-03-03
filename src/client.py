@@ -225,6 +225,9 @@ def user(conn, args):
                 username = input("Username: ")
                 conn.send({"type": "user", "method": "verify", "username": username})
             pwd = encrypt(getpass("Password: "))
+            if encrypt(getpass("Confirm password: ")) != pwd:
+                print("Passwords didn't match")
+                return
             print("Note: The rest of the fields are not required. Leave them blank at choice.")
             email = input("Email: ")
             website = input("Website: ")
