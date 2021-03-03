@@ -54,7 +54,7 @@ class Package:
 
     def get_version(self, version):
         if version == "RECENT":
-            return max(self.versions, key=lambda x: int(x.name.replace(".", "")))
+            return max(self.versions, key=lambda x: int(x.version.replace(".", "")))
         else:
             for v in self.versions:
                 if v == version:
