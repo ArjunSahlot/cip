@@ -25,7 +25,7 @@ import ctypes
 import threading
 
 IP = "192.168.1.10"
-PORT = 5555
+PORT = 5050
 
 
 class Version:
@@ -149,6 +149,8 @@ class Server:
         for user in self.users:
             if pack := user.get_version(package, version):
                 return pack
+
+        return f"Package {package} does not exist"
 
     def check_user(self, username):
         return isinstance(self.get_user(username), str)
