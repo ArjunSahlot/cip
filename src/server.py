@@ -78,6 +78,11 @@ class User:
         self.packages = []
 
     def add_package(self, package, version, content):
+        for pack in self.packages:
+            if pack == package:
+                pack.add_version(version, content)
+                return
+
         p = Package(package)
         p.add_version(version, content)
         self.packages.append(p)
@@ -231,6 +236,9 @@ class Client:
 
             elif cmd["type"] == "auth":
                 self.send({"type": "reply", "reply": self.server.auth(cmd["username"], cmd["password"])})
+
+            elif cmd["type"] == "version":
+                self.send({"type": "reply", "reply": not isinstance(self.server.get_version(cmd["package"], cmd["version"]), str)})
 
     def quit(self):
         self.conn.close()
