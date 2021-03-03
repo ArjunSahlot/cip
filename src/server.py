@@ -23,6 +23,7 @@ import socket
 import pickle
 import ctypes
 import threading
+from datetime import datetime
 
 IP = "192.168.1.10"
 PORT = 5050
@@ -30,6 +31,7 @@ PORT = 5050
 
 class Version:
     def __init__(self, owner, version, content):
+        self.time = datetime.now()
         self.owner = owner
         self.version = version
         self.content = content
@@ -54,7 +56,7 @@ class Package:
 
     def get_version(self, version):
         if version == "RECENT":
-            return max(self.versions, key=lambda x: int(x.version.replace(".", "")))
+            return max(self.versions, key=lambda x: x.time)
         else:
             for v in self.versions:
                 if v == version:
