@@ -148,18 +148,27 @@ def upload(conn, args):
         while re.search(re.compile(), pack_name) is None:
             print(f"Invalid package name {pack_name}")
             pack_name = input("Package name: ")
-        version = input("Version: ")
-        conn.send({"type": "version", "package": pack_name, "version": version})
-        while conn.recv()["reply"]:
-            print(f"Version {version} already exists")
-            version = input("Version: ")
-            conn.send({"type": "version", "package": pack_name, "version": version})
+
         username = input("Username: ")
         conn.send({"type": "user", "method": "verify", "username": username})
         while conn.recv()["reply"] == "success":
             print(f"User {username} does not exist")
             username = input("Username: ")
             conn.send({"type": "user", "method": "verify", "username": username})
+
+        conn.send({"type": "package", "package": pack_name, "user": username})
+        while conn.recv()["reply"]:
+            print(f"Version {version} already exists")
+            version = input("Version: ")
+            conn.send({"type": "version", "package": pack_name, "version": version})
+
+        version = input("Version: ")
+        conn.send({"type": "version", "package": pack_name, "version": version})
+        while conn.recv()["reply"]:
+            print(f"Version {version} already exists")
+            version = input("Version: ")
+            conn.send({"type": "version", "package": pack_name, "version": version})
+
         for i in range(3):
             password = encrypt(getpass(f"(Attempt {i+1}/3) Password: "))
             conn.send({"type": "auth", "username": username, "password": password})
