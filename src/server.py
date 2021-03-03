@@ -25,7 +25,7 @@ import ctypes
 import threading
 
 IP = "192.168.1.10"
-PORT = 5050
+PORT = 5555
 
 
 class Version:
@@ -296,6 +296,3 @@ def main():
 
 
 main()
-
-
-# Check if another user already has the same package.
