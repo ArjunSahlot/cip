@@ -18,6 +18,7 @@
 #
 
 import os
+import re
 import sys
 import zlib
 import socket
@@ -87,7 +88,7 @@ def print_help():
     print("cip install <package name>                Install the latest version of a package")
     print("cip install <package name>=<version>      Install the specified version of a package")
     print("cip uninstall <package name>              Uninstall a package")
-    print("cip upload <package path>                 Upload your package for everyone to use")
+    print("cip upload <package name> <package path>  Upload your package for everyone to use")
     print("cip user <username> <-c --create>         Get info about a user. Provide -c or --create flag for creating user\n")
     print("Additions:")
     print("    -h --help")
@@ -143,6 +144,17 @@ def uninstall(conn, args):
 
 def upload(conn, args):
     if args:
+        pack_name = args[0]
+        while re.search(re.compile(), pack_name) is None:
+            print(f"Invalid package name {pack_name}")
+            pack_name = input("Package name: ")
+        version = input("Version: ")
+        conn.send({"type": "version", "package": pack_name, "version": version})
+        while conn.recv()["reply"]:
+            print(f"Version {version} already exists")
+            version = input("Version: ")
+            conn.send({"type": "version", "package": pack_name, "version": version})
+
         username = input("Username: ")
         conn.send({"type": "user", "method": "verify", "username": username})
         while conn.recv()["reply"] == "success":
@@ -161,20 +173,20 @@ def upload(conn, args):
 
         print("Password authentication successful")
         print("Compressing data...")
-        if os.path.isdir(args[0]):
+        if os.path.isdir(args[1]):
             tmp = Path.home() / "Downloads/cip-tmp.zip"
-            shutil.make_archive(os.path.splitext(tmp)[0], "zip", args[0])
+            shutil.make_archive(os.path.splitext(tmp)[0], "zip", args[1])
             with open(tmp, "rb") as f:
                 content = f.read()
             os.remove(tmp)
-        elif os.path.isfile(args[0]):
-            with open(args[0], "r") as f:
+        elif os.path.isfile(args[1]):
+            with open(args[1], "r") as f:
                 content = f.read().encode()
         else:
             print("Not a valid path.")
             return
         print("Uploading package...")
-        conn.send({"type": "upload", "package": os.path.basename(args[0]), "version": args[1], "content": content})
+        conn.send({"type": "upload", "package": pack_name, "version": version, "content": content})
         print("Successfully uploaded")
 
 
