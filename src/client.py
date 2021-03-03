@@ -26,6 +26,7 @@ import pickle
 import ctypes
 import shutil
 import threading
+from getpass import getuser
 from pathlib import Path
 from hashlib import sha256
 from getpass import getpass
@@ -117,6 +118,8 @@ def install(conn, args):
                 raise NotImplementedError("Currently macos is not supported for installation.")
                 path = ""
             else:
+                if getuser() != "root":
+                    raise PermissionError("You need to be root to install packages")
                 path = "/usr/include/c++/9"
 
             print("Writing package...")
