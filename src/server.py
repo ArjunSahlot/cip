@@ -250,7 +250,7 @@ class Client:
 
             elif cmd["type"] == "upload":
                 self.server.add_package(cmd["user"], cmd["package"], cmd["version"], cmd["content"])
-                self.conn.send({"type": "reply", "reply": "success"})
+                self.send({"type": "reply", "reply": "success"})
 
             elif cmd["type"] == "auth":
                 self.send({"type": "reply", "reply": self.server.auth(cmd["username"], cmd["password"])})
