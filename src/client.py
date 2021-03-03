@@ -158,9 +158,9 @@ def upload(conn, args):
 
         conn.send({"type": "package", "package": pack_name, "user": username})
         while conn.recv()["reply"]:
-            print(f"Version {version} already exists")
-            version = input("Version: ")
-            conn.send({"type": "version", "package": pack_name, "version": version})
+            print(f"Package {pack_name} already exists")
+            pack_name = input("Package Name: ")
+            conn.send({"type": "package", "package": pack_name, "user": username})
 
         version = input("Version: ")
         conn.send({"type": "version", "package": pack_name, "version": version})
