@@ -140,6 +140,8 @@ def install(conn, args):
 
 def uninstall(conn, args):
     if args:
+        if "y" not in input(f"Are you sure you want to uninstall {args[0]}"):
+            return
         print("Getting path...")
         if sys.platform == "windows":
             print(f"Package {args[0]} does not exist")
